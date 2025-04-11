@@ -1,13 +1,17 @@
 import EditIssueDialog from '@/components/shared/EditIssueDialog/EditIssueDialog.tsx';
 
-const Issue = () => {
+type IssueProps = {
+    title: string;
+};
+
+const Issue = ({ title }: IssueProps) => {
     return (
         <EditIssueDialog
-            issue={{ a: 'a' }}
+            issue={{ a: title }}
             triggerClassName="w-full cursor-pointer"
         >
-            <div className="border-2 w-full p-2 text-left">
-                <span>Issue</span>
+            <div className="border-2 w-full p-2 text-left bg-white rounded shadow-sm">
+                <span>{title}</span>
             </div>
         </EditIssueDialog>
     );
