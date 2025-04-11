@@ -1,21 +1,21 @@
 import { Button } from '@/components/ui/button.tsx';
 import { Link, useLocation } from 'react-router-dom';
-import { clsx } from 'clsx';
 import EditIssueDialog from '@/components/shared/EditIssueDialog/EditIssueDialog.tsx';
+import { cn } from '@/lib/utils.ts';
 
 const Header = () => {
     const location = useLocation();
 
     return (
         <div
-            className={clsx(
+            className={cn(
                 'sticky top-0 z-50 bg-white',
                 'flex items-center justify-between',
                 'border-b mb-2',
             )}
         >
             <div
-                className={clsx(
+                className={cn(
                     'flex items-center justify-between',
                     'w-full max-w-[1280px] mx-auto py-2',
                 )}
@@ -23,7 +23,7 @@ const Header = () => {
                 <div className="flex items-center gap-x-4">
                     <Link
                         to="/issues"
-                        className={clsx(
+                        className={cn(
                             location.pathname === '/issues' && 'text-red-500',
                         )}
                     >
@@ -31,7 +31,7 @@ const Header = () => {
                     </Link>
                     <Link
                         to="/boards"
-                        className={clsx(
+                        className={cn(
                             location.pathname.startsWith('/board') &&
                                 'text-red-500',
                         )}

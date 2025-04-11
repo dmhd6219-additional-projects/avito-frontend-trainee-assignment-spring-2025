@@ -1,11 +1,11 @@
 import { Card } from '@/components/ui/card.tsx';
 import { Link } from 'react-router-dom';
-import { clsx } from 'clsx';
+import { cn } from '@/lib/utils.ts';
 
 const Project = () => {
     return (
         <Card
-            className={clsx(
+            className={cn(
                 'flex flex-row items-center justify-between',
                 'px-4 max-w-4xl',
             )}
