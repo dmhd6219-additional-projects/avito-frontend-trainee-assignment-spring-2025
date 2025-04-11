@@ -33,7 +33,7 @@ const EditIssueDialog = ({
 }: EditIssueProps) => {
     return (
         <Dialog>
-            <DialogTrigger className={triggerClassName}>
+            <DialogTrigger className={triggerClassName} asChild>
                 {children}
             </DialogTrigger>
             <DialogContent>

@@ -18,11 +18,11 @@ const Issues = () => {
                     'border-1 rounded-xl w-full p-4',
                 )}
             >
-                <Issue />
+                <Issue title="Задача 1" />
 
-                <Issue />
+                <Issue title="Задача 2" />
 
-                <Issue />
+                <Issue title="Задача 3" />
 
                 <EditIssueDialog triggerClassName="self-end">
                     <Button>Создать задачу</Button>

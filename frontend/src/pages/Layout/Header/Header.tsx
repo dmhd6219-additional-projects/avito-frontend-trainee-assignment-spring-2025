@@ -32,7 +32,7 @@ const Header = () => {
                     <Link
                         to="/boards"
                         className={clsx(
-                            location.pathname.startsWith('/boards') &&
+                            location.pathname.startsWith('/board') &&
                                 'text-red-500',
                         )}
                     >
