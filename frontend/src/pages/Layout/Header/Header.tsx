@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button.tsx';
 import { Link, useLocation } from 'react-router-dom';
 import { clsx } from 'clsx';
+import EditIssueDialog from '@/components/shared/EditIssueDialog/EditIssueDialog.tsx';
 
 const Header = () => {
     const location = useLocation();
@@ -38,7 +39,9 @@ const Header = () => {
                         Проекты
                     </Link>
                 </div>
-                <Button>Создать задачу</Button>
+                <EditIssueDialog>
+                    <Button>Создать задачу</Button>
+                </EditIssueDialog>
             </div>
         </div>
     );
