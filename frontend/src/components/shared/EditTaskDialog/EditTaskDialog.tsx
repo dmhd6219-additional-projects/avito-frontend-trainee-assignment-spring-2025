@@ -73,6 +73,11 @@ const EditTaskDialog = ({
         },
     });
 
+    const DRAFT_KEY = task ? `task-draft-${task.id}` : 'task-draft-new';
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [wasRestoredFromDraft, setWasRestoredFromDraft] =
+        React.useState(false);
+
     function onSubmit(values: z.infer<typeof editTaskFormSchema>) {
         if (!task) {
             createTask({
@@ -89,10 +94,39 @@ const EditTaskDialog = ({
             ...omit(values, 'boardId'),
             assigneeId: Number(values.assigneeId),
         });
+        localStorage.removeItem(DRAFT_KEY);
     }
 
+    React.useEffect(() => {
+        const subscription = form.watch((values) => {
+            localStorage.setItem(DRAFT_KEY, JSON.stringify(values));
+        });
+        return () => subscription.unsubscribe();
+    }, [form, DRAFT_KEY]);
+
     return (
-        <Dialog>
+        <Dialog
+            open={isOpen}
+            onOpenChange={(open) => {
+                setIsOpen(open);
+                if (open) {
+                    const saved = localStorage.getItem(DRAFT_KEY);
+                    if (saved) {
+                        try {
+                            form.reset(JSON.parse(saved));
+                            setWasRestoredFromDraft(true);
+                        } catch (e) {
+                            console.error(
+                                'Не удалось восстановить черновик:',
+                                e,
+                            );
+                        }
+                    } else {
+                        setWasRestoredFromDraft(false);
+                    }
+                }
+            }}
+        >
             <DialogTrigger className={triggerClassName} asChild>
                 {children}
             </DialogTrigger>
@@ -108,6 +142,12 @@ const EditTaskDialog = ({
                             </DialogTitle>
 
                             <DialogDescription className="flex flex-col gap-y-4">
+                                {wasRestoredFromDraft && (
+                                    <div className="text-sm text-muted-foreground">
+                                        Некоторые значения были восстановлены из
+                                        черновика
+                                    </div>
+                                )}
                                 <FormField
                                     control={form.control}
                                     name="title"
@@ -151,12 +191,9 @@ const EditTaskDialog = ({
                                             <FormControl>
                                                 <Select
                                                     disabled={!!task}
-                                                    onValueChange={
-                                                        field.onChange
-                                                    }
                                                     value={field.value}
                                                 >
-                                                    <SelectTrigger className="w-full">
+                                                    <SelectTrigger>
                                                         <SelectValue placeholder="Выберите доску" />
                                                     </SelectTrigger>
                                                     {boards && (
@@ -194,12 +231,12 @@ const EditTaskDialog = ({
                                             <FormLabel>Приоритет</FormLabel>
                                             <FormControl>
                                                 <Select
-                                                    onValueChange={
-                                                        field.onChange
-                                                    }
+                                                    onValueChange={(e) => {
+                                                        field.onChange(e);
+                                                    }}
                                                     value={field.value}
                                                 >
-                                                    <SelectTrigger className="w-full">
+                                                    <SelectTrigger>
                                                         <SelectValue placeholder="Выберите приоритет" />
                                                     </SelectTrigger>
                                                     <SelectContent
@@ -235,12 +272,12 @@ const EditTaskDialog = ({
                                             <FormLabel>Статус</FormLabel>
                                             <FormControl>
                                                 <Select
-                                                    onValueChange={
-                                                        field.onChange
-                                                    }
+                                                    onValueChange={(e) => {
+                                                        field.onChange(e);
+                                                    }}
                                                     value={field.value}
                                                 >
-                                                    <SelectTrigger className="w-full">
+                                                    <SelectTrigger>
                                                         <SelectValue placeholder="Выберите статус" />
                                                     </SelectTrigger>
                                                     <SelectContent
@@ -274,12 +311,12 @@ const EditTaskDialog = ({
                                             <FormLabel>Исполнитель</FormLabel>
                                             <FormControl>
                                                 <Select
-                                                    onValueChange={
-                                                        field.onChange
-                                                    }
+                                                    onValueChange={(e) => {
+                                                        field.onChange(e);
+                                                    }}
                                                     value={field.value}
                                                 >
-                                                    <SelectTrigger className="w-full">
+                                                    <SelectTrigger>
                                                         <SelectValue placeholder="Выберите исполнителя" />
                                                     </SelectTrigger>
                                                     {users && (
