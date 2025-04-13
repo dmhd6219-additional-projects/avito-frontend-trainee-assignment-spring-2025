@@ -1,4 +1,4 @@
-import Project from './Project/Project.tsx';
+import BoardCard from '@/pages/Boards/BoardCard/BoardCard.tsx';
 import { useGetBoardsQuery } from '@/store/api/boardsApi.ts';
 
 const Boards = () => {
@@ -8,9 +8,9 @@ const Boards = () => {
     if (isLoading || !boards) return <div>Loading...</div>;
 
     return (
-        <div className="flex flex-col gap-y-4">
+        <div className="grid grid-cols-3 gap-x-4 gap-y-3">
             {boards.data.map((board) => (
-                <Project name={board.name} id={board.id} key={board.id} />
+                <BoardCard key={board.id} board={board} />
             ))}
         </div>
     );
