@@ -1,21 +1,37 @@
 import EditTaskDialog from '@/components/shared/EditTaskDialog/EditTaskDialog.tsx';
 import { TaskOnBoard } from '@/types/api/board.ts';
+import {
+    Card,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 
 type TaskProps = {
     task: TaskOnBoard;
     boardId?: number;
+    big?: boolean;
 };
 
-const Task = ({ task, boardId }: TaskProps) => {
+const Task = ({ task, boardId, big }: TaskProps) => {
     return (
         <EditTaskDialog
             task={task}
             triggerClassName="w-full cursor-pointer"
             boardId={boardId}
         >
-            <div className="border-2 w-full p-2 text-left bg-white rounded shadow-sm">
-                <span>{task.title}</span>
-            </div>
+            {big ? (
+                <Card>
+                    <CardHeader>
+                        <CardTitle>{task.title}</CardTitle>
+                        <CardDescription>{task.description}</CardDescription>
+                    </CardHeader>
+                </Card>
+            ) : (
+                <div className="border-2 w-full p-2 text-left bg-white rounded shadow-sm">
+                    <span>{task.title}</span>
+                </div>
+            )}
         </EditTaskDialog>
     );
 };

@@ -27,10 +27,14 @@ export interface GetTaskByIDResponse extends TaskBase {
     assignee: Assignee;
 }
 
-export interface GetTasksResponse extends TaskBase {
+export interface TaskOnAllTasks extends TaskBase {
     boardId: number;
     boardName: string;
     assignee: Assignee;
+}
+
+export interface GetAllTasksResponse {
+    data: TaskOnAllTasks[];
 }
 
 export interface CreateTaskRequest {
