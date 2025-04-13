@@ -6,6 +6,7 @@ import {
     UpdateTaskRequest,
     UpdateTaskResponse,
     UpdateTaskStatusRequest,
+    UpdateTaskStatusResponse,
 } from '@/types/api/tasks.ts';
 
 export const tasksApi = createApi({
@@ -39,7 +40,7 @@ export const tasksApi = createApi({
             ],
         }),
         updateTaskStatus: builder.mutation<
-            UpdateTaskResponse,
+            UpdateTaskStatusResponse,
             UpdateTaskStatusRequest
         >({
             query: ({ taskId, status }) => ({
