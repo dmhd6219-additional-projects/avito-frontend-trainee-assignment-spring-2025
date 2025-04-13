@@ -9,7 +9,7 @@ import {
 
 type TaskProps = {
     task: TaskOnBoard;
-    boardId?: number;
+    boardId?: string;
     big?: boolean;
 };
 

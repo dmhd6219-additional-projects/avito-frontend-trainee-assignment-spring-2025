@@ -17,10 +17,11 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 
-import { Input } from '@/components/ui/input.tsx';
-import { Textarea } from '@/components/ui/textarea.tsx';
-import { Button } from '@/components/ui/button.tsx';
-import { TaskOnBoard } from '@/types/api/board.ts';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { TaskOnBoard } from '@/types/api/board';
 import { useState } from 'react';
 import {
     TASK_PRIORITY_VALUES,
@@ -29,12 +30,14 @@ import {
     TaskStatus,
 } from '@/types/api/tasks.ts';
 import { Link } from 'react-router-dom';
+import { useGetBoardsQuery } from '@/store/api/boardsApi.ts';
+import { useGetAllUsersQuery } from '@/store/api/usersApi.ts';
 
 interface EditTaskProps {
     children: React.ReactNode;
     triggerClassName?: string;
     task?: TaskOnBoard;
-    boardId?: number;
+    boardId?: string;
 }
 
 const EditTaskDialog = ({
@@ -43,9 +46,14 @@ const EditTaskDialog = ({
     task,
     boardId,
 }: EditTaskProps) => {
+    const { data: boards } = useGetBoardsQuery();
+    const { data: users } = useGetAllUsersQuery();
+
     const [name, setName] = useState<string>(task?.title || '');
     const [desc, setDesc] = useState<string>(task?.description || '');
-
+    const [board, setBoard] = useState<string | undefined>(
+        boardId ? boardId.toString() : '',
+    );
     const [priority, setPriority] = useState<TaskPriority | undefined>(
         task?.priority,
     );
@@ -62,82 +70,127 @@ const EditTaskDialog = ({
                         {task ? 'Редактирование' : 'Создание'} задачи
                     </DialogTitle>
                     <DialogDescription className="flex flex-col gap-y-4">
-                        <Input
-                            placeholder="Название"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                        <Textarea
-                            placeholder="Описание"
-                            value={desc}
-                            onChange={(e) => setDesc(e.target.value)}
-                        />
-                        <Select>
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Проект" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="light">Light</SelectItem>
-                                <SelectItem value="dark">Dark</SelectItem>
-                                <SelectItem value="system">System</SelectItem>
-                            </SelectContent>
-                        </Select>
+                        <div className="grid w-full items-center gap-1.5">
+                            <Label>Название</Label>
+                            <Input
+                                placeholder="Введите название"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                        </div>
 
-                        <Select
-                            onValueChange={(value: TaskPriority) =>
-                                setPriority(value)
-                            }
-                            defaultValue={priority}
-                        >
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Приоритет" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {TASK_PRIORITY_VALUES.map((priority) => (
-                                    <SelectItem key={priority} value={priority}>
-                                        {priority}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                        <div className="grid w-full items-center gap-1.5">
+                            <Label>Описание</Label>
+                            <Textarea
+                                placeholder="Введите описание"
+                                value={desc}
+                                onChange={(e) => setDesc(e.target.value)}
+                            />
+                        </div>
 
-                        <Select
-                            onValueChange={(value: TaskStatus) =>
-                                setStatus(value)
-                            }
-                            defaultValue={status}
-                        >
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Статус" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {TASK_STATUS_VALUES.map((status) => (
-                                    <SelectItem key={status} value={status}>
-                                        {status}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                        <div className="grid w-full items-center gap-1.5">
+                            <Label>Доска</Label>
+                            <Select
+                                disabled={!!task}
+                                onValueChange={(value: string) =>
+                                    setBoard(value)
+                                }
+                                value={board}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Выберите доску" />
+                                </SelectTrigger>
+                                {boards && (
+                                    <SelectContent>
+                                        {boards.data.map((board) => (
+                                            <SelectItem
+                                                key={board.id}
+                                                value={board.id.toString()}
+                                            >
+                                                {board.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                )}
+                            </Select>
+                        </div>
 
-                        <Select>
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Исполнитель" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="light">Light</SelectItem>
-                                <SelectItem value="dark">Dark</SelectItem>
-                                <SelectItem value="system">System</SelectItem>
-                            </SelectContent>
-                        </Select>
+                        <div className="grid w-full items-center gap-1.5">
+                            <Label>Приоритет</Label>
+                            <Select
+                                onValueChange={(value: TaskPriority) =>
+                                    setPriority(value)
+                                }
+                                value={priority}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Выберите приоритет" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {TASK_PRIORITY_VALUES.map((priority) => (
+                                        <SelectItem
+                                            key={priority}
+                                            value={priority}
+                                        >
+                                            {priority}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <div className="grid w-full items-center gap-1.5">
+                            <Label>Статус</Label>
+                            <Select
+                                onValueChange={(value: TaskStatus) =>
+                                    setStatus(value)
+                                }
+                                value={status}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Выберите статус" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {TASK_STATUS_VALUES.map((status) => (
+                                        <SelectItem key={status} value={status}>
+                                            {status}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <div className="grid w-full items-center gap-1.5">
+                            <Label>Исполнитель</Label>
+                            <Select>
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Выберите исполнителя" />
+                                </SelectTrigger>
+                                {users && (
+                                    <SelectContent>
+                                        {users.data.map((user) => (
+                                            <SelectItem
+                                                key={user.id}
+                                                value={user.id.toString()}
+                                            >
+                                                {user.fullName}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                )}
+                            </Select>
+                        </div>
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="pt-2 w-full flex flex-row items-center justify-between">
                     <DialogClose>
-                        <Button disabled={!boardId} asChild>
-                            <Link to={`/board/${boardId}`}>
-                                Перейти на доску
-                            </Link>
-                        </Button>
+                        {boardId && (
+                            <Button asChild variant="secondary">
+                                <Link to={`/board/${boardId}`}>
+                                    Перейти на доску
+                                </Link>
+                            </Button>
+                        )}
                     </DialogClose>
                     <Button>{task ? 'Обновить' : 'Создать'}</Button>
                 </DialogFooter>

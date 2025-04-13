@@ -8,9 +8,10 @@ import { TaskOnBoard } from '@/types/api/board.ts';
 type DraggableTaskProps = {
     task: TaskOnBoard;
     columnId: string;
+    boardId?: string;
 };
 
-const DraggableTask = ({ task, columnId }: DraggableTaskProps) => {
+const DraggableTask = ({ task, columnId, boardId }: DraggableTaskProps) => {
     const {
         attributes,
         listeners,
@@ -45,7 +46,7 @@ const DraggableTask = ({ task, columnId }: DraggableTaskProps) => {
             </button>
 
             <div className="flex-grow">
-                <Task task={task} />
+                <Task task={task} boardId={boardId} />
             </div>
         </div>
     );

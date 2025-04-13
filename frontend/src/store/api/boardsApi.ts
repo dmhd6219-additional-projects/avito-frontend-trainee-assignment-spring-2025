@@ -6,7 +6,7 @@ export const boardsApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080/api/v1' }),
     tagTypes: ['Boards'],
     endpoints: (builder) => ({
-        getBoards: builder.query<GetBoardsResponse, string>({
+        getBoards: builder.query<GetBoardsResponse, void>({
             query: () => '/boards',
             providesTags: ['Boards'],
         }),

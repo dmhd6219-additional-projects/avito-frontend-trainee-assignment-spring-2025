@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import Header from './Header/Header.tsx';
-import { Providers } from '@/components/shared/providers';
+import { Providers } from '@/components/shared/Providers';
 
 const Layout = () => {
     return (

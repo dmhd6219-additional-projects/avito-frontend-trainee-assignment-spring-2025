@@ -2,7 +2,7 @@ import BoardCard from '@/pages/Boards/BoardCard/BoardCard.tsx';
 import { useGetBoardsQuery } from '@/store/api/boardsApi.ts';
 
 const Boards = () => {
-    const { data: boards, isLoading, error } = useGetBoardsQuery('');
+    const { data: boards, isLoading, error } = useGetBoardsQuery();
 
     if (error) return <div>Error...</div>;
     if (isLoading || !boards) return <div>Loading...</div>;

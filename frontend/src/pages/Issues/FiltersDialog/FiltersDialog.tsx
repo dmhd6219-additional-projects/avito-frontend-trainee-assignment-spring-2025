@@ -32,7 +32,7 @@ const FiltersDialog = () => {
     const filters = useSelector((state: RootState) => state.filters);
     const dispatch = useDispatch();
 
-    const { data: boards } = useGetBoardsQuery('');
+    const { data: boards } = useGetBoardsQuery();
     const { data: users } = useGetAllUsersQuery();
 
     const [newStatus, setNewStatus] = useState<TaskStatus | undefined>(
