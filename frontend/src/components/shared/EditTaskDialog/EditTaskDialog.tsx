@@ -183,7 +183,7 @@ const EditTaskDialog = ({
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="pt-2 w-full flex flex-row items-center justify-between">
-                    <DialogClose>
+                    <DialogClose asChild>
                         {boardId && (
                             <Button asChild variant="secondary">
                                 <Link to={`/board/${boardId}`}>
