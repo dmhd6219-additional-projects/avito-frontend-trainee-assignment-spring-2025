@@ -3,7 +3,9 @@ import { GetUsersResponse } from '@/types/api/users.ts';
 
 export const usersApi = createApi({
     reducerPath: 'usersApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080/api/v1' }),
+    baseQuery: fetchBaseQuery({
+        baseUrl: import.meta.env.VITE_BACKEND_BASE_URL,
+    }),
     tagTypes: ['Users'],
     endpoints: (builder) => ({
         getAllUsers: builder.query<GetUsersResponse, void>({

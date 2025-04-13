@@ -3,7 +3,9 @@ import { GetBoardResponse, GetBoardsResponse } from '@/types/api/board.ts';
 
 export const boardsApi = createApi({
     reducerPath: 'boardsApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080/api/v1' }),
+    baseQuery: fetchBaseQuery({
+        baseUrl: import.meta.env.VITE_BACKEND_BASE_URL,
+    }),
     tagTypes: ['Boards'],
     endpoints: (builder) => ({
         getBoards: builder.query<GetBoardsResponse, void>({

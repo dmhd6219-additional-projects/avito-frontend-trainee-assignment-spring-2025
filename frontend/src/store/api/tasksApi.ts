@@ -10,7 +10,9 @@ import {
 
 export const tasksApi = createApi({
     reducerPath: 'tasksApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080/api/v1' }),
+    baseQuery: fetchBaseQuery({
+        baseUrl: import.meta.env.VITE_BACKEND_BASE_URL,
+    }),
     tagTypes: ['Tasks'],
     endpoints: (builder) => ({
         getAllTasks: builder.query<GetAllTasksResponse, string>({
