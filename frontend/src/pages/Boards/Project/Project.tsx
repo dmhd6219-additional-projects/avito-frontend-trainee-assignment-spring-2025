@@ -2,7 +2,12 @@ import { Card } from '@/components/ui/card.tsx';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils.ts';
 
-const Project = () => {
+interface ProjectProps {
+    name: string;
+    id: number;
+}
+
+const Project = ({ name, id }: ProjectProps) => {
     return (
         <Card
             className={cn(
@@ -10,8 +15,8 @@ const Project = () => {
                 'px-4 max-w-4xl',
             )}
         >
-            <span>Название проекта</span>
-            <Link to="/board/1">Перейти к доске</Link>
+            <span>{name}</span>
+            <Link to={`/board/${id}`}>Перейти к доске</Link>
         </Card>
     );
 };

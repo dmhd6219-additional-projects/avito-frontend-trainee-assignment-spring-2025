@@ -1,16 +1,17 @@
 import * as React from 'react';
 import { useDraggable } from '@dnd-kit/core';
-import Issue from '@/components/shared/Issue/Issue.tsx';
-import { ColumnKey, IssueType } from '@/pages/Board/Board.tsx';
+import Task from '@/components/shared/Task/Task.tsx';
 import { GripVertical } from 'lucide-react';
 import { cn } from '@/lib/utils.ts';
+import { TaskOnBoard } from '@/types/api/board.ts';
 
-type DraggableIssueProps = {
-    issue: IssueType;
-    columnId: ColumnKey;
+type DraggableTaskProps = {
+    task: TaskOnBoard;
+    columnId: string;
+    boardId: number;
 };
 
-const DraggableIssue = ({ issue, columnId }: DraggableIssueProps) => {
+const DraggableTask = ({ task, columnId, boardId }: DraggableTaskProps) => {
     const {
         attributes,
         listeners,
@@ -18,7 +19,7 @@ const DraggableIssue = ({ issue, columnId }: DraggableIssueProps) => {
         transform,
         setActivatorNodeRef,
     } = useDraggable({
-        id: issue.id,
+        id: task.id.toString(),
         data: { columnId },
     });
 
@@ -45,10 +46,10 @@ const DraggableIssue = ({ issue, columnId }: DraggableIssueProps) => {
             </button>
 
             <div className="flex-grow">
-                <Issue title={issue.title} />
+                <Task task={task} boardId={boardId} />
             </div>
         </div>
     );
 };
 
-export default DraggableIssue;
+export default DraggableTask;

@@ -1,8 +1,7 @@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import Issue from '@/components/shared/Issue/Issue';
 import { cn } from '@/lib/utils';
-import EditIssueDialog from '@/components/shared/EditIssueDialog/EditIssueDialog.tsx';
+import EditTaskDialog from '@/components/shared/EditTaskDialog/EditTaskDialog.tsx';
 import FiltersDialog from './FiltersDialog/FiltersDialog.tsx';
 
 const Issues = () => {
@@ -18,15 +17,9 @@ const Issues = () => {
                     'border-1 rounded-xl w-full p-4',
                 )}
             >
-                <Issue title="Задача 1" />
-
-                <Issue title="Задача 2" />
-
-                <Issue title="Задача 3" />
-
-                <EditIssueDialog triggerClassName="self-end">
+                <EditTaskDialog triggerClassName="self-end">
                     <Button>Создать задачу</Button>
-                </EditIssueDialog>
+                </EditTaskDialog>
             </div>
         </div>
     );

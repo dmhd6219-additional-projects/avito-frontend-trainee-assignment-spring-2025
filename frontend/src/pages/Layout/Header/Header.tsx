@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button.tsx';
 import { Link, useLocation } from 'react-router-dom';
-import EditIssueDialog from '@/components/shared/EditIssueDialog/EditIssueDialog.tsx';
+import EditTaskDialog from '@/components/shared/EditTaskDialog/EditTaskDialog.tsx';
 import { cn } from '@/lib/utils.ts';
 
 const Header = () => {
@@ -39,9 +39,9 @@ const Header = () => {
                         Проекты
                     </Link>
                 </div>
-                <EditIssueDialog>
+                <EditTaskDialog>
                     <Button>Создать задачу</Button>
-                </EditIssueDialog>
+                </EditTaskDialog>
             </div>
         </div>
     );
