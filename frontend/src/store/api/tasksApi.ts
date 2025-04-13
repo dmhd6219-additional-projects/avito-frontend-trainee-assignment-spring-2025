@@ -19,12 +19,6 @@ export const tasksApi = createApi({
             query: () => '/tasks',
             providesTags: ['Tasks'],
         }),
-        getTaskById: builder.query({
-            query: (taskId) => `/tasks/${taskId}`,
-            providesTags: (_res, _err, taskId) => [
-                { type: 'Tasks', id: taskId },
-            ],
-        }),
         createTask: builder.mutation<CreateTaskResponse, CreateTaskRequest>({
             query: (body: CreateTaskRequest) => ({
                 url: '/tasks/create',
@@ -44,8 +38,11 @@ export const tasksApi = createApi({
                 { type: 'Tasks', id: taskId },
             ],
         }),
-        updateTaskStatus: builder.mutation({
-            query: ({ taskId, status }: UpdateTaskStatusRequest) => ({
+        updateTaskStatus: builder.mutation<
+            UpdateTaskResponse,
+            UpdateTaskStatusRequest
+        >({
+            query: ({ taskId, status }) => ({
                 url: `/tasks/updateStatus/${taskId}`,
                 method: 'PUT',
                 body: {
@@ -62,7 +59,6 @@ export const tasksApi = createApi({
 
 export const {
     useGetAllTasksQuery,
-    useGetTaskByIdQuery,
     useCreateTaskMutation,
     useUpdateTaskMutation,
     useUpdateTaskStatusMutation,

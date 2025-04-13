@@ -12,13 +12,7 @@ export const usersApi = createApi({
             query: () => '/users',
             providesTags: ['Users'],
         }),
-        getUserTasks: builder.query({
-            query: (userId) => `/users/${userId}/tasks`,
-            providesTags: (_res, _err, userId) => [
-                { type: 'Users', id: userId },
-            ],
-        }),
     }),
 });
 
-export const { useGetAllUsersQuery, useGetUserTasksQuery } = usersApi;
+export const { useGetAllUsersQuery } = usersApi;
