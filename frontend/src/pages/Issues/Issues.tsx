@@ -4,11 +4,11 @@ import EditTaskDialog from '@/components/shared/EditTaskDialog/EditTaskDialog.ts
 import FiltersDialog from './FiltersDialog/FiltersDialog.tsx';
 import { useGetAllTasksQuery } from '@/store/api/tasksApi.ts';
 import Task from '@/components/shared/Task/Task.tsx';
-import { useState } from 'react';
-import { useDebouncedCallback } from 'use-debounce';
+import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { TaskOnAllTasks } from '@/types/api/tasks.ts';
+import { debounce } from 'lodash';
 
 const Issues = () => {
     const filters = useSelector((state: RootState) => state.filters);
@@ -17,9 +17,10 @@ const Issues = () => {
     const [searchValue, setSearchValue] = useState('');
     const [debouncedSearchValue, setDebouncedSearchValue] = useState('');
 
-    const debounced = useDebouncedCallback((value: string) => {
-        setDebouncedSearchValue(value);
-    }, 500);
+    const delayedSearch = useMemo(
+        () => debounce((value: string) => setDebouncedSearchValue(value), 500),
+        [],
+    );
 
     const filterTasks = (tasks: TaskOnAllTasks[]) => {
         return tasks.filter((task) => {
@@ -55,7 +56,7 @@ const Issues = () => {
                     value={searchValue}
                     onChange={(e) => {
                         setSearchValue(e.target.value);
-                        debounced(e.target.value);
+                        delayedSearch(e.target.value);
                     }}
                 />
 
