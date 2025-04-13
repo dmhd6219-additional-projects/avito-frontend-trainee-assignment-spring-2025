@@ -6,8 +6,13 @@ import { useGetAllTasksQuery } from '@/store/api/tasksApi.ts';
 import Task from '@/components/shared/Task/Task.tsx';
 import { useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { TaskOnAllTasks } from '@/types/api/tasks.ts';
 
 const Issues = () => {
+    const filters = useSelector((state: RootState) => state.filters);
+
     const { data: tasks, isLoading, error } = useGetAllTasksQuery('');
     const [searchValue, setSearchValue] = useState('');
     const [debouncedSearchValue, setDebouncedSearchValue] = useState('');
@@ -15,6 +20,28 @@ const Issues = () => {
     const debounced = useDebouncedCallback((value: string) => {
         setDebouncedSearchValue(value);
     }, 500);
+
+    const filterTasks = (tasks: TaskOnAllTasks[]) => {
+        return tasks.filter((task) => {
+            const matchesStatus =
+                !filters.status || task.status === filters.status;
+            const matchesBoard =
+                !filters.boardId || task.boardId.toString() === filters.boardId;
+            const matchesAssignee =
+                !filters.userId ||
+                task.assignee.id.toString() === filters.userId;
+            const matchesSearch = task.title
+                .toLowerCase()
+                .includes(debouncedSearchValue.toLowerCase());
+
+            return (
+                matchesStatus &&
+                matchesBoard &&
+                matchesAssignee &&
+                matchesSearch
+            );
+        });
+    };
 
     if (error) return <div>Error...</div>;
     if (isLoading || !tasks) return <div>Loading...</div>;
@@ -41,15 +68,9 @@ const Issues = () => {
             </div>
 
             <div className="w-full grid grid-cols-2 gap-x-4 gap-y-3">
-                {tasks.data
-                    .filter((task) =>
-                        task.title
-                            .toLowerCase()
-                            .includes(debouncedSearchValue.toLowerCase()),
-                    )
-                    .map((task) => (
-                        <Task task={task} big />
-                    ))}
+                {filterTasks(tasks.data).map((task) => (
+                    <Task task={task} big />
+                ))}
             </div>
         </div>
     );
