@@ -69,7 +69,7 @@ const Issues = () => {
 
             <div className="w-full grid grid-cols-2 gap-x-4 gap-y-3">
                 {filterTasks(tasks.data).map((task) => (
-                    <Task task={task} big />
+                    <Task task={task} boardId={task.boardId} big />
                 ))}
             </div>
         </div>

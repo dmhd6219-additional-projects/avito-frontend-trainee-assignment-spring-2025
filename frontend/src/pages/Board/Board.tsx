@@ -82,7 +82,6 @@ const Board = () => {
                 <div className="grid grid-cols-3 gap-4">
                     {TASK_STATUS_VALUES.map((colKey) => (
                         <Column
-                            boardId={Number(boardId)}
                             key={colKey}
                             id={colKey}
                             title={colKey}

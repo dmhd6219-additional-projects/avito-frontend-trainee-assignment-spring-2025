@@ -28,6 +28,7 @@ import {
     TaskPriority,
     TaskStatus,
 } from '@/types/api/tasks.ts';
+import { Link } from 'react-router-dom';
 
 interface EditTaskProps {
     children: React.ReactNode;
@@ -132,7 +133,11 @@ const EditTaskDialog = ({
                 </DialogHeader>
                 <DialogFooter className="pt-2 w-full flex flex-row items-center justify-between">
                     <DialogClose>
-                        <Button disabled={!boardId}>Перейти на доску</Button>
+                        <Button disabled={!boardId} asChild>
+                            <Link to={`/board/${boardId}`}>
+                                Перейти на доску
+                            </Link>
+                        </Button>
                     </DialogClose>
                     <Button>{task ? 'Обновить' : 'Создать'}</Button>
                 </DialogFooter>

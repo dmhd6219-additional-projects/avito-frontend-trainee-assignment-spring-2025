@@ -4,13 +4,12 @@ import { TaskStatus } from '@/types/api/tasks.ts';
 import { TaskOnBoard } from '@/types/api/board.ts';
 
 type ColumnProps = {
-    boardId: number;
     id: TaskStatus;
     title: string;
     items: TaskOnBoard[];
 };
 
-const Column = ({ id, title, items, boardId }: ColumnProps) => {
+const Column = ({ id, title, items }: ColumnProps) => {
     const { setNodeRef } = useDroppable({ id });
 
     return (
@@ -18,12 +17,7 @@ const Column = ({ id, title, items, boardId }: ColumnProps) => {
             <h2 className="font-bold mb-2">{title}</h2>
             <div className="flex flex-col gap-2">
                 {items.map((task) => (
-                    <DraggableTask
-                        boardId={boardId}
-                        key={task.id}
-                        task={task}
-                        columnId={id}
-                    />
+                    <DraggableTask key={task.id} task={task} columnId={id} />
                 ))}
             </div>
         </div>
