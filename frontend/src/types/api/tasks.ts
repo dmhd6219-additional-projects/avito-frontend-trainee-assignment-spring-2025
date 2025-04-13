@@ -5,14 +5,11 @@ export interface Assignee {
     avatarUrl: string;
 }
 
-export type TaskPriority = 'Low' | 'Medium' | 'High';
-export const TASK_PRIORITY_VALUES: TaskPriority[] = ['Low', 'Medium', 'High'];
-export type TaskStatus = 'Backlog' | 'InProgress' | 'Done';
-export const TASK_STATUS_VALUES: TaskStatus[] = [
-    'Backlog',
-    'InProgress',
-    'Done',
-];
+export const TASK_PRIORITY_VALUES = ['Low', 'Medium', 'High'] as const;
+export type TaskPriority = (typeof TASK_PRIORITY_VALUES)[number];
+
+export const TASK_STATUS_VALUES = ['Backlog', 'InProgress', 'Done'] as const;
+export type TaskStatus = (typeof TASK_STATUS_VALUES)[number];
 
 export interface TaskBase {
     id: number;
@@ -50,11 +47,12 @@ export interface CreateTaskResponse {
 }
 
 export interface UpdateTaskRequest {
+    taskId: number;
     assigneeId: number;
     description: string;
     title: string;
-    priority?: TaskPriority;
-    status?: TaskStatus;
+    priority: TaskPriority;
+    status: TaskStatus;
 }
 
 export interface UpdateTaskResponse {

@@ -50,7 +50,7 @@ const Issues = () => {
         <div className="flex flex-col items-center gap-y-4">
             <div className="w-full flex justify-between items-center">
                 <Input
-                    placeholder="Поиск"
+                    placeholder="Поиск по названию"
                     className="w-[300px]"
                     value={searchValue}
                     onChange={(e) => {
@@ -68,9 +68,15 @@ const Issues = () => {
             </div>
 
             <div className="w-full grid grid-cols-2 gap-x-4 gap-y-3">
-                {filterTasks(tasks.data).map((task) => (
-                    <Task task={task} boardId={task.boardId.toString()} big />
-                ))}
+                {filterTasks(tasks.data)
+                    .reverse()
+                    .map((task) => (
+                        <Task
+                            task={task}
+                            boardId={task.boardId.toString()}
+                            big
+                        />
+                    ))}
             </div>
         </div>
     );

@@ -20,18 +20,28 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { TaskOnBoard } from '@/types/api/board';
-import { useState } from 'react';
-import {
-    TASK_PRIORITY_VALUES,
-    TASK_STATUS_VALUES,
-    TaskPriority,
-    TaskStatus,
-} from '@/types/api/tasks.ts';
+import { TASK_PRIORITY_VALUES, TASK_STATUS_VALUES } from '@/types/api/tasks.ts';
 import { Link } from 'react-router-dom';
 import { useGetBoardsQuery } from '@/store/api/boardsApi.ts';
 import { useGetAllUsersQuery } from '@/store/api/usersApi.ts';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { editTaskFormSchema } from '@/types/schemas/editTaskFormSchema.ts';
+import { z } from 'zod';
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from '@/components/ui/form';
+import {
+    useCreateTaskMutation,
+    useUpdateTaskMutation,
+} from '@/store/api/tasksApi';
+import { omit } from 'lodash';
 
 interface EditTaskProps {
     children: React.ReactNode;
@@ -46,18 +56,40 @@ const EditTaskDialog = ({
     task,
     boardId,
 }: EditTaskProps) => {
+    const [createTask] = useCreateTaskMutation();
+    const [updateTask] = useUpdateTaskMutation();
     const { data: boards } = useGetBoardsQuery();
     const { data: users } = useGetAllUsersQuery();
 
-    const [name, setName] = useState<string>(task?.title || '');
-    const [desc, setDesc] = useState<string>(task?.description || '');
-    const [board, setBoard] = useState<string | undefined>(
-        boardId ? boardId.toString() : '',
-    );
-    const [priority, setPriority] = useState<TaskPriority | undefined>(
-        task?.priority,
-    );
-    const [status, setStatus] = useState<TaskStatus | undefined>(task?.status);
+    const form = useForm<z.infer<typeof editTaskFormSchema>>({
+        resolver: zodResolver(editTaskFormSchema),
+        defaultValues: {
+            title: task?.title || '',
+            description: task?.description || '',
+            boardId: boardId ? boardId.toString() : '',
+            priority: task?.priority,
+            status: task?.status,
+            assigneeId: task ? task.assignee.id.toString() : undefined,
+        },
+    });
+
+    function onSubmit(values: z.infer<typeof editTaskFormSchema>) {
+        if (!task) {
+            createTask({
+                ...values,
+                boardId: Number(values.boardId),
+                assigneeId: Number(values.assigneeId),
+            });
+            return;
+        }
+
+        updateTask({
+            taskId: Number(task.id),
+            ...values,
+            ...omit(values, 'boardId'),
+            assigneeId: Number(values.assigneeId),
+        });
+    }
 
     return (
         <Dialog>
@@ -65,135 +97,237 @@ const EditTaskDialog = ({
                 {children}
             </DialogTrigger>
             <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
-                <DialogHeader>
-                    <DialogTitle className="pb-4">
-                        {task ? 'Редактирование' : 'Создание'} задачи
-                    </DialogTitle>
-                    <DialogDescription className="flex flex-col gap-y-4">
-                        <div className="grid w-full items-center gap-1.5">
-                            <Label>Название</Label>
-                            <Input
-                                placeholder="Введите название"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                            />
-                        </div>
+                <Form {...form}>
+                    <form
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        className="space-y-8"
+                    >
+                        <DialogHeader>
+                            <DialogTitle className="pb-4">
+                                {task ? 'Редактирование' : 'Создание'} задачи
+                            </DialogTitle>
 
-                        <div className="grid w-full items-center gap-1.5">
-                            <Label>Описание</Label>
-                            <Textarea
-                                placeholder="Введите описание"
-                                value={desc}
-                                onChange={(e) => setDesc(e.target.value)}
-                            />
-                        </div>
+                            <DialogDescription className="flex flex-col gap-y-4">
+                                <FormField
+                                    control={form.control}
+                                    name="title"
+                                    render={({ field }) => (
+                                        <FormItem className="grid w-full items-center gap-1.5">
+                                            <FormLabel>Название</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="Введите название"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
-                        <div className="grid w-full items-center gap-1.5">
-                            <Label>Доска</Label>
-                            <Select
-                                disabled={!!task}
-                                onValueChange={(value: string) =>
-                                    setBoard(value)
-                                }
-                                value={board}
-                            >
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Выберите доску" />
-                                </SelectTrigger>
-                                {boards && (
-                                    <SelectContent>
-                                        {boards.data.map((board) => (
-                                            <SelectItem
-                                                key={board.id}
-                                                value={board.id.toString()}
-                                            >
-                                                {board.name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
+                                <FormField
+                                    control={form.control}
+                                    name="description"
+                                    render={({ field }) => (
+                                        <FormItem className="grid w-full items-center gap-1.5">
+                                            <FormLabel>Описание</FormLabel>
+                                            <FormControl>
+                                                <Textarea
+                                                    placeholder="Введите описание"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="boardId"
+                                    render={({ field }) => (
+                                        <FormItem className="grid w-full items-center gap-1.5">
+                                            <FormLabel>Доска</FormLabel>
+                                            <FormControl>
+                                                <Select
+                                                    disabled={!!task}
+                                                    onValueChange={
+                                                        field.onChange
+                                                    }
+                                                    value={field.value}
+                                                >
+                                                    <SelectTrigger className="w-full">
+                                                        <SelectValue placeholder="Выберите доску" />
+                                                    </SelectTrigger>
+                                                    {boards && (
+                                                        <SelectContent
+                                                            ref={field.ref}
+                                                        >
+                                                            {boards.data.map(
+                                                                (board) => (
+                                                                    <SelectItem
+                                                                        key={
+                                                                            board.id
+                                                                        }
+                                                                        value={board.id.toString()}
+                                                                    >
+                                                                        {
+                                                                            board.name
+                                                                        }
+                                                                    </SelectItem>
+                                                                ),
+                                                            )}
+                                                        </SelectContent>
+                                                    )}
+                                                </Select>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="priority"
+                                    render={({ field }) => (
+                                        <FormItem className="grid w-full items-center gap-1.5">
+                                            <FormLabel>Приоритет</FormLabel>
+                                            <FormControl>
+                                                <Select
+                                                    onValueChange={
+                                                        field.onChange
+                                                    }
+                                                    value={field.value}
+                                                >
+                                                    <SelectTrigger className="w-full">
+                                                        <SelectValue placeholder="Выберите приоритет" />
+                                                    </SelectTrigger>
+                                                    <SelectContent
+                                                        ref={field.ref}
+                                                    >
+                                                        {TASK_PRIORITY_VALUES.map(
+                                                            (priority) => (
+                                                                <SelectItem
+                                                                    key={
+                                                                        priority
+                                                                    }
+                                                                    value={
+                                                                        priority
+                                                                    }
+                                                                >
+                                                                    {priority}
+                                                                </SelectItem>
+                                                            ),
+                                                        )}
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="status"
+                                    render={({ field }) => (
+                                        <FormItem className="grid w-full items-center gap-1.5">
+                                            <FormLabel>Статус</FormLabel>
+                                            <FormControl>
+                                                <Select
+                                                    onValueChange={
+                                                        field.onChange
+                                                    }
+                                                    value={field.value}
+                                                >
+                                                    <SelectTrigger className="w-full">
+                                                        <SelectValue placeholder="Выберите статус" />
+                                                    </SelectTrigger>
+                                                    <SelectContent
+                                                        ref={field.ref}
+                                                    >
+                                                        {TASK_STATUS_VALUES.map(
+                                                            (status) => (
+                                                                <SelectItem
+                                                                    key={status}
+                                                                    value={
+                                                                        status
+                                                                    }
+                                                                >
+                                                                    {status}
+                                                                </SelectItem>
+                                                            ),
+                                                        )}
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="assigneeId"
+                                    render={({ field }) => (
+                                        <FormItem className="grid w-full items-center gap-1.5">
+                                            <FormLabel>Исполнитель</FormLabel>
+                                            <FormControl>
+                                                <Select
+                                                    onValueChange={
+                                                        field.onChange
+                                                    }
+                                                    value={field.value}
+                                                >
+                                                    <SelectTrigger className="w-full">
+                                                        <SelectValue placeholder="Выберите исполнителя" />
+                                                    </SelectTrigger>
+                                                    {users && (
+                                                        <SelectContent
+                                                            ref={field.ref}
+                                                        >
+                                                            {users.data.map(
+                                                                (user) => (
+                                                                    <SelectItem
+                                                                        key={
+                                                                            user.id
+                                                                        }
+                                                                        value={user.id.toString()}
+                                                                    >
+                                                                        {
+                                                                            user.fullName
+                                                                        }
+                                                                    </SelectItem>
+                                                                ),
+                                                            )}
+                                                        </SelectContent>
+                                                    )}
+                                                </Select>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter className="pt-2 w-full flex flex-row items-center justify-between">
+                            <DialogClose asChild>
+                                {boardId && (
+                                    <Button asChild variant="secondary">
+                                        <Link to={`/board/${boardId}`}>
+                                            Перейти на доску
+                                        </Link>
+                                    </Button>
                                 )}
-                            </Select>
-                        </div>
-
-                        <div className="grid w-full items-center gap-1.5">
-                            <Label>Приоритет</Label>
-                            <Select
-                                onValueChange={(value: TaskPriority) =>
-                                    setPriority(value)
-                                }
-                                value={priority}
-                            >
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Выберите приоритет" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {TASK_PRIORITY_VALUES.map((priority) => (
-                                        <SelectItem
-                                            key={priority}
-                                            value={priority}
-                                        >
-                                            {priority}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        <div className="grid w-full items-center gap-1.5">
-                            <Label>Статус</Label>
-                            <Select
-                                onValueChange={(value: TaskStatus) =>
-                                    setStatus(value)
-                                }
-                                value={status}
-                            >
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Выберите статус" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {TASK_STATUS_VALUES.map((status) => (
-                                        <SelectItem key={status} value={status}>
-                                            {status}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        <div className="grid w-full items-center gap-1.5">
-                            <Label>Исполнитель</Label>
-                            <Select>
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Выберите исполнителя" />
-                                </SelectTrigger>
-                                {users && (
-                                    <SelectContent>
-                                        {users.data.map((user) => (
-                                            <SelectItem
-                                                key={user.id}
-                                                value={user.id.toString()}
-                                            >
-                                                {user.fullName}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                )}
-                            </Select>
-                        </div>
-                    </DialogDescription>
-                </DialogHeader>
-                <DialogFooter className="pt-2 w-full flex flex-row items-center justify-between">
-                    <DialogClose asChild>
-                        {boardId && (
-                            <Button asChild variant="secondary">
-                                <Link to={`/board/${boardId}`}>
-                                    Перейти на доску
-                                </Link>
-                            </Button>
-                        )}
-                    </DialogClose>
-                    <Button>{task ? 'Обновить' : 'Создать'}</Button>
-                </DialogFooter>
+                            </DialogClose>
+                            <DialogClose>
+                                <Button type="submit">
+                                    {task ? 'Обновить' : 'Создать'}
+                                </Button>
+                            </DialogClose>
+                        </DialogFooter>
+                    </form>
+                </Form>
             </DialogContent>
         </Dialog>
     );

@@ -24,7 +24,7 @@ const Header = () => {
                     <Link
                         to="/issues"
                         className={cn(
-                            location.pathname === '/issues' && 'text-red-500',
+                            location.pathname === '/issues' && 'text-blue-500',
                         )}
                     >
                         Все задачи
@@ -33,7 +33,7 @@ const Header = () => {
                         to="/boards"
                         className={cn(
                             location.pathname.startsWith('/board') &&
-                                'text-red-500',
+                                'text-blue-500',
                         )}
                     >
                         Проекты

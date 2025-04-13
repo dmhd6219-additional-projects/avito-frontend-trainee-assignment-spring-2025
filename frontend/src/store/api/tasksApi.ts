@@ -1,6 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
+    CreateTaskRequest,
+    CreateTaskResponse,
     GetAllTasksResponse,
+    UpdateTaskRequest,
+    UpdateTaskResponse,
     UpdateTaskStatusRequest,
 } from '@/types/api/tasks.ts';
 
@@ -19,21 +23,22 @@ export const tasksApi = createApi({
                 { type: 'Tasks', id: taskId },
             ],
         }),
-        createTask: builder.mutation({
-            query: (body) => ({
+        createTask: builder.mutation<CreateTaskResponse, CreateTaskRequest>({
+            query: (body: CreateTaskRequest) => ({
                 url: '/tasks/create',
                 method: 'POST',
                 body,
             }),
             invalidatesTags: ['Tasks'],
         }),
-        updateTask: builder.mutation({
+        updateTask: builder.mutation<UpdateTaskResponse, UpdateTaskRequest>({
             query: ({ taskId, ...body }) => ({
                 url: `/tasks/update/${taskId}`,
                 method: 'PUT',
                 body,
             }),
             invalidatesTags: (_res, _err, { taskId }) => [
+                'Tasks',
                 { type: 'Tasks', id: taskId },
             ],
         }),
@@ -46,6 +51,7 @@ export const tasksApi = createApi({
                 },
             }),
             invalidatesTags: (_res, _err, { taskId }) => [
+                'Tasks',
                 { type: 'Tasks', id: taskId },
             ],
         }),
