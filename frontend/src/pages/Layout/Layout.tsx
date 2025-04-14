@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import Header from './Header/Header.tsx';
 import { Providers } from '@/components/shared/Providers';
+import { Toaster } from '@/components/ui/sonner';
 
 const Layout = () => {
     return (
@@ -9,6 +10,7 @@ const Layout = () => {
             <main className="max-w-[1280px] mx-auto">
                 <Outlet />
             </main>
+            <Toaster />
         </Providers>
     );
 };

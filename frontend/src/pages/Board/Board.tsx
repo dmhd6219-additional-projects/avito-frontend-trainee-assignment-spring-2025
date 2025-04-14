@@ -7,6 +7,7 @@ import { TASK_STATUS_VALUES, TaskStatus } from '@/types/api/tasks';
 import { TaskOnBoard } from '@/types/api/board';
 import { useUpdateTaskStatusMutation } from '@/store/api/tasksApi';
 import BoardSkeleton from './BoardSkeleton/BoardSkeleton';
+import { toast } from 'sonner';
 
 type ColumnsState = Record<TaskStatus, TaskOnBoard[]>;
 
@@ -67,6 +68,8 @@ const Board = () => {
         updateTaskStatus({
             taskId: taskId,
             status: toColumn,
+        }).catch(() => {
+            toast.error(`Произошла ошибка при обновлении статуса задачи.`);
         });
     };
 

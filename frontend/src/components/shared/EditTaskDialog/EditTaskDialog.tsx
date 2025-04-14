@@ -30,6 +30,7 @@ import BoardField from './components/BoardField';
 import PriorityField from './components/PriorityField';
 import StatusField from './components/StatusField';
 import AssigneeField from './components/AssigneeField';
+import { toast } from 'sonner';
 
 interface EditTaskProps {
     children: React.ReactNode;
@@ -72,7 +73,13 @@ const EditTaskDialog = ({
                 ...values,
                 boardId: Number(values.boardId),
                 assigneeId: Number(values.assigneeId),
-            });
+            })
+                .then(() => {
+                    toast.success(`Задача успешно создана!`);
+                })
+                .catch(() => {
+                    toast.error(`Произошла ошибка при создании задачи.`);
+                });
             return;
         }
 
@@ -81,10 +88,15 @@ const EditTaskDialog = ({
             ...values,
             ...omit(values, 'boardId'),
             assigneeId: Number(values.assigneeId),
-        }).then(() => {
-            localStorage.removeItem(DRAFT_KEY);
-            setIsOpen(false);
-        });
+        })
+            .then(() => {
+                localStorage.removeItem(DRAFT_KEY);
+                setIsOpen(false);
+                toast.success(`Задача успешно обновлена!`);
+            })
+            .catch(() => {
+                toast.error(`Произошла ошибка при обновлении задачи.`);
+            });
     }
 
     React.useEffect(() => {
