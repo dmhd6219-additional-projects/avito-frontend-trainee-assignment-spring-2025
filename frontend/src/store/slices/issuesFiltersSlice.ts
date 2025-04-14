@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TaskStatus } from '@/types/api/tasks.ts';
+import { TaskStatus } from '@/types/api/tasks';
 
 interface FiltersState {
     status?: TaskStatus;

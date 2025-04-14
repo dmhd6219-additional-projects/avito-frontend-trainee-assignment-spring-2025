@@ -14,7 +14,7 @@ import {
     SelectValue,
 } from '@/components/ui/select.tsx';
 import { GetBoardsResponse, TaskOnBoard } from '@/types/api/board.ts';
-import { FieldProps } from '@/components/shared/EditTaskDialog/components/fieldProps.ts';
+import { FieldProps } from '@/components/shared/EditTaskDialog/components/fields/fieldProps.ts';
 
 interface BoardFieldProps<TFieldValues extends FieldValues>
     extends FieldProps<TFieldValues> {

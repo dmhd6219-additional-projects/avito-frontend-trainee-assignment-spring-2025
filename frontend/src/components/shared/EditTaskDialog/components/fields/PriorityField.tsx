@@ -13,19 +13,19 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select.tsx';
-import { TASK_STATUS_VALUES } from '@/types/api/tasks.ts';
-import { FieldProps } from '@/components/shared/EditTaskDialog/components/fieldProps.ts';
+import { TASK_PRIORITY_VALUES } from '@/types/api/tasks.ts';
+import { FieldProps } from '@/components/shared/EditTaskDialog/components/fields/fieldProps.ts';
 
-const StatusField = <TFieldValues extends FieldValues>({
+const PriorityField = <TFieldValues extends FieldValues>({
     control,
 }: FieldProps<TFieldValues>) => {
     return (
         <FormField
             control={control}
-            name={'status' as FieldPath<TFieldValues>}
+            name={'priority' as FieldPath<TFieldValues>}
             render={({ field }) => (
                 <FormItem className="grid w-full items-center gap-1.5">
-                    <FormLabel>Статус</FormLabel>
+                    <FormLabel>Приоритет</FormLabel>
                     <FormControl>
                         <Select
                             onValueChange={(e) => {
@@ -34,12 +34,12 @@ const StatusField = <TFieldValues extends FieldValues>({
                             value={field.value}
                         >
                             <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Выберите статус" />
+                                <SelectValue placeholder="Выберите приоритет" />
                             </SelectTrigger>
                             <SelectContent ref={field.ref}>
-                                {TASK_STATUS_VALUES.map((status) => (
-                                    <SelectItem key={status} value={status}>
-                                        {status}
+                                {TASK_PRIORITY_VALUES.map((priority) => (
+                                    <SelectItem key={priority} value={priority}>
+                                        {priority}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -52,4 +52,4 @@ const StatusField = <TFieldValues extends FieldValues>({
     );
 };
 
-export default StatusField;
+export default PriorityField;

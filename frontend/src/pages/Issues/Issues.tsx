@@ -1,15 +1,15 @@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import EditTaskDialog from '@/components/shared/EditTaskDialog/EditTaskDialog.tsx';
-import FiltersDialog from './FiltersDialog/FiltersDialog.tsx';
-import { useGetAllTasksQuery } from '@/store/api/tasksApi.ts';
-import Task from '@/components/shared/Task/Task.tsx';
+import FiltersDialog from './FiltersDialog/FiltersDialog';
+import { useGetAllTasksQuery } from '@/store/api/tasksApi';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { TaskOnAllTasks } from '@/types/api/tasks';
 import { debounce } from 'lodash';
 import IssuesSkeleton from './IssuesSkeleton/IssuesSkeleton';
+import { Task } from '@/components/shared/Task';
+import { EditTaskDialog } from '@/components/shared/EditTaskDialog';
 
 const Issues = () => {
     const filters = useSelector((state: RootState) => state.filters);

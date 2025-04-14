@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import Header from './Header/Header.tsx';
+import Header from './Header/Header';
 import { Providers } from '@/components/shared/Providers';
 import { Toaster } from '@/components/ui/sonner';
 

@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { boardsApi } from './api/boardsApi';
 import { tasksApi } from './api/tasksApi';
+import { usersApi } from './api/usersApi';
 import issuesFiltersReducer from './slices/issuesFiltersSlice';
-import { usersApi } from '@/store/api/usersApi.ts';
 
 export const store = configureStore({
     reducer: {

@@ -12,11 +12,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { TaskOnBoard } from '@/types/api/board';
 import { Link } from 'react-router-dom';
-import { useGetBoardsQuery } from '@/store/api/boardsApi.ts';
-import { useGetAllUsersQuery } from '@/store/api/usersApi.ts';
+import { useGetBoardsQuery } from '@/store/api/boardsApi';
+import { useGetAllUsersQuery } from '@/store/api/usersApi';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { editTaskFormSchema } from '@/types/schemas/editTaskFormSchema.ts';
+import { editTaskFormSchema } from '@/types/schemas/editTaskFormSchema';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import {
@@ -24,13 +24,15 @@ import {
     useUpdateTaskMutation,
 } from '@/store/api/tasksApi';
 import { omit } from 'lodash';
-import TitleField from './components/TitleField';
-import DescField from './components/DescField';
-import BoardField from './components/BoardField';
-import PriorityField from './components/PriorityField';
-import StatusField from './components/StatusField';
-import AssigneeField from './components/AssigneeField';
 import { toast } from 'sonner';
+import {
+    AssigneeField,
+    BoardField,
+    DescField,
+    PriorityField,
+    StatusField,
+    TitleField,
+} from './components/fields';
 
 interface EditTaskProps {
     children: React.ReactNode;

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useDraggable } from '@dnd-kit/core';
-import Task from '@/components/shared/Task/Task.tsx';
 import { GripVertical } from 'lucide-react';
-import { cn } from '@/lib/utils.ts';
-import { TaskOnBoard } from '@/types/api/board.ts';
+import { cn } from '@/lib/utils';
+import { TaskOnBoard } from '@/types/api/board';
+import { Task } from '@/components/shared/Task';
 
 type DraggableTaskProps = {
     task: TaskOnBoard;

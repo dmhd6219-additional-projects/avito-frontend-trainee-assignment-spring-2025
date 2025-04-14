@@ -6,8 +6,8 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import { Board } from '@/types/api/board.ts';
-import { Button } from '@/components/ui/button.tsx';
+import { Board } from '@/types/api/board';
+import { Button } from '@/components/ui/button';
 
 interface ProjectProps {
     board: Board;

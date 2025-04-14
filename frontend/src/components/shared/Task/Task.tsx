@@ -1,11 +1,11 @@
-import EditTaskDialog from '@/components/shared/EditTaskDialog/EditTaskDialog.tsx';
-import { TaskOnBoard } from '@/types/api/board.ts';
+import { TaskOnBoard } from '@/types/api/board';
 import {
     Card,
     CardDescription,
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import { EditTaskDialog } from '@/components/shared/EditTaskDialog';
 
 type TaskProps = {
     task: TaskOnBoard;

@@ -14,7 +14,7 @@ import {
     SelectValue,
 } from '@/components/ui/select.tsx';
 import { GetUsersResponse } from '@/types/api/users.ts';
-import { FieldProps } from '@/components/shared/EditTaskDialog/components/fieldProps.ts';
+import { FieldProps } from '@/components/shared/EditTaskDialog/components/fields/fieldProps.ts';
 
 interface AssigneeFieldProps<TFieldValues extends FieldValues>
     extends FieldProps<TFieldValues> {

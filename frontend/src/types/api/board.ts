@@ -1,4 +1,4 @@
-import { Assignee, TaskBase } from '@/types/api/tasks.ts';
+import { Assignee, TaskBase } from '@/types/api/tasks';
 
 export interface Board {
     id: number;

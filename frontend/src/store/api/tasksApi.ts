@@ -7,7 +7,7 @@ import {
     UpdateTaskResponse,
     UpdateTaskStatusRequest,
     UpdateTaskStatusResponse,
-} from '@/types/api/tasks.ts';
+} from '@/types/api/tasks';
 
 export const tasksApi = createApi({
     reducerPath: 'tasksApi',

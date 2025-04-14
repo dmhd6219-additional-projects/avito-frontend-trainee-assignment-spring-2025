@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { GetBoardResponse, GetBoardsResponse } from '@/types/api/board.ts';
+import { GetBoardResponse, GetBoardsResponse } from '@/types/api/board';
 
 export const boardsApi = createApi({
     reducerPath: 'boardsApi',

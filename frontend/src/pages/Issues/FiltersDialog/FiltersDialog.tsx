@@ -25,8 +25,8 @@ import {
     setUserId,
 } from '@/store/slices/issuesFiltersSlice';
 import { useState } from 'react';
-import { useGetBoardsQuery } from '@/store/api/boardsApi.ts';
-import { useGetAllUsersQuery } from '@/store/api/usersApi.ts';
+import { useGetBoardsQuery } from '@/store/api/boardsApi';
+import { useGetAllUsersQuery } from '@/store/api/usersApi';
 
 const FiltersDialog = () => {
     const filters = useSelector((state: RootState) => state.filters);

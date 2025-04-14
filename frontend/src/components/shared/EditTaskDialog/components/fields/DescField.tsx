@@ -5,22 +5,22 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form.tsx';
-import { Input } from '@/components/ui/input.tsx';
 import { FieldPath, FieldValues } from 'react-hook-form';
-import { FieldProps } from '@/components/shared/EditTaskDialog/components/fieldProps.ts';
+import { Textarea } from '@/components/ui/textarea.tsx';
+import { FieldProps } from '@/components/shared/EditTaskDialog/components/fields/fieldProps.ts';
 
-const TitleField = <TFieldValues extends FieldValues>({
+const DescField = <TFieldValues extends FieldValues>({
     control,
 }: FieldProps<TFieldValues>) => {
     return (
         <FormField
             control={control}
-            name={'title' as FieldPath<TFieldValues>}
+            name={'description' as FieldPath<TFieldValues>}
             render={({ field }) => (
                 <FormItem className="grid w-full items-center gap-1.5">
-                    <FormLabel>Название</FormLabel>
+                    <FormLabel>Описание</FormLabel>
                     <FormControl>
-                        <Input placeholder="Введите название" {...field} />
+                        <Textarea placeholder="Введите описание" {...field} />
                     </FormControl>
                     <FormMessage />
                 </FormItem>
@@ -29,4 +29,4 @@ const TitleField = <TFieldValues extends FieldValues>({
     );
 };
 
-export default TitleField;
+export default DescField;
