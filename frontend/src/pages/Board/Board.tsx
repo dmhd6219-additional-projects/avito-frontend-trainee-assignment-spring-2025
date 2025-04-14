@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
-import Column from './Column/Column';
 import { useGetBoardTasksQuery } from '@/store/api/boardsApi';
 import { useParams } from 'react-router-dom';
 import { TASK_STATUS_VALUES, TaskStatus } from '@/types/api/tasks';
 import { TaskOnBoard } from '@/types/api/board';
 import { useUpdateTaskStatusMutation } from '@/store/api/tasksApi';
-import BoardSkeleton from './BoardSkeleton/BoardSkeleton';
 import { toast } from 'sonner';
+import { Column } from './components/Column';
+import { BoardSkeleton } from './components/BoardSkeleton';
 
 type ColumnsState = Record<TaskStatus, TaskOnBoard[]>;
 

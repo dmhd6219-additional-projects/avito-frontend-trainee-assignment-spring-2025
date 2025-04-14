@@ -1,6 +1,6 @@
-import BoardCard from '@/pages/Boards/BoardCard/BoardCard';
 import { useGetBoardsQuery } from '@/store/api/boardsApi';
-import BoardsSkeleton from './BoardsSkeleton/BoardsSkeleton';
+import { BoardsSkeleton } from './components/BoardsSkeleton';
+import { BoardCard } from './components/BoardCard';
 
 const Boards = () => {
     const { data: boards, isLoading, error } = useGetBoardsQuery();

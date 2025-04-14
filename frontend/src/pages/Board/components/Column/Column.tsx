@@ -1,5 +1,5 @@
 import { useDroppable } from '@dnd-kit/core';
-import DraggableTask from '../DraggableTask/DraggableTask';
+import { DraggableTask } from '../DraggableTask';
 import { TaskStatus } from '@/types/api/tasks';
 import { TaskOnBoard } from '@/types/api/board';
 

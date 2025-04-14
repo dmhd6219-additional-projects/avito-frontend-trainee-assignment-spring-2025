@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button.tsx';
 import { Link, useLocation } from 'react-router-dom';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils.ts';
 import { EditTaskDialog } from '@/components/shared/EditTaskDialog';
 
 const Header = () => {
