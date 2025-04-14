@@ -93,8 +93,10 @@ const EditTaskDialog = ({
             ...values,
             ...omit(values, 'boardId'),
             assigneeId: Number(values.assigneeId),
+        }).then(() => {
+            localStorage.removeItem(DRAFT_KEY);
+            setIsOpen(false);
         });
-        localStorage.removeItem(DRAFT_KEY);
     }
 
     React.useEffect(() => {
@@ -361,11 +363,9 @@ const EditTaskDialog = ({
                                     </Button>
                                 )}
                             </DialogClose>
-                            <DialogClose className="ml-auto">
-                                <Button type="submit">
-                                    {task ? 'Обновить' : 'Создать'}
-                                </Button>
-                            </DialogClose>
+                            <Button type="submit" className="ml-auto">
+                                {task ? 'Обновить' : 'Создать'}
+                            </Button>
                         </DialogFooter>
                     </form>
                 </Form>
