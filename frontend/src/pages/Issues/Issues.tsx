@@ -7,8 +7,9 @@ import Task from '@/components/shared/Task/Task.tsx';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { TaskOnAllTasks } from '@/types/api/tasks.ts';
+import { TaskOnAllTasks } from '@/types/api/tasks';
 import { debounce } from 'lodash';
+import IssuesSkeleton from './IssuesSkeleton/IssuesSkeleton';
 
 const Issues = () => {
     const filters = useSelector((state: RootState) => state.filters);
@@ -45,7 +46,7 @@ const Issues = () => {
     };
 
     if (error) return <div>Error...</div>;
-    if (isLoading || !tasks) return <div>Loading...</div>;
+    if (isLoading || !tasks) return <IssuesSkeleton />;
 
     return (
         <div className="flex flex-col items-center gap-y-4">
