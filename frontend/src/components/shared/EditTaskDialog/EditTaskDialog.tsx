@@ -137,17 +137,20 @@ const EditTaskDialog = ({
                         className="space-y-8"
                     >
                         <DialogHeader>
-                            <DialogTitle className="pb-4">
-                                {task ? 'Редактирование' : 'Создание'} задачи
-                            </DialogTitle>
-
-                            <DialogDescription className="flex flex-col gap-y-4">
+                            <DialogTitle className="pb-4 flex flex-col gap-y-2">
+                                <h1>
+                                    {task ? 'Редактирование' : 'Создание'}{' '}
+                                    задачи
+                                </h1>
                                 {wasRestoredFromDraft && (
                                     <div className="text-sm text-muted-foreground">
                                         Некоторые значения были восстановлены из
                                         черновика
                                     </div>
                                 )}
+                            </DialogTitle>
+
+                            <DialogDescription className="flex flex-col gap-y-4">
                                 <FormField
                                     control={form.control}
                                     name="title"
@@ -193,11 +196,12 @@ const EditTaskDialog = ({
                                                     disabled={!!task}
                                                     value={field.value}
                                                 >
-                                                    <SelectTrigger>
+                                                    <SelectTrigger className="w-full">
                                                         <SelectValue placeholder="Выберите доску" />
                                                     </SelectTrigger>
                                                     {boards && (
                                                         <SelectContent
+                                                            className="w-full"
                                                             ref={field.ref}
                                                         >
                                                             {boards.data.map(
@@ -236,7 +240,7 @@ const EditTaskDialog = ({
                                                     }}
                                                     value={field.value}
                                                 >
-                                                    <SelectTrigger>
+                                                    <SelectTrigger className="w-full">
                                                         <SelectValue placeholder="Выберите приоритет" />
                                                     </SelectTrigger>
                                                     <SelectContent
@@ -277,7 +281,7 @@ const EditTaskDialog = ({
                                                     }}
                                                     value={field.value}
                                                 >
-                                                    <SelectTrigger>
+                                                    <SelectTrigger className="w-full">
                                                         <SelectValue placeholder="Выберите статус" />
                                                     </SelectTrigger>
                                                     <SelectContent
@@ -316,7 +320,7 @@ const EditTaskDialog = ({
                                                     }}
                                                     value={field.value}
                                                 >
-                                                    <SelectTrigger>
+                                                    <SelectTrigger className="w-full">
                                                         <SelectValue placeholder="Выберите исполнителя" />
                                                     </SelectTrigger>
                                                     {users && (
@@ -357,7 +361,7 @@ const EditTaskDialog = ({
                                     </Button>
                                 )}
                             </DialogClose>
-                            <DialogClose>
+                            <DialogClose className="ml-auto">
                                 <Button type="submit">
                                     {task ? 'Обновить' : 'Создать'}
                                 </Button>
