@@ -9,19 +9,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
-
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { TaskOnBoard } from '@/types/api/board';
-import { TASK_PRIORITY_VALUES, TASK_STATUS_VALUES } from '@/types/api/tasks.ts';
 import { Link } from 'react-router-dom';
 import { useGetBoardsQuery } from '@/store/api/boardsApi.ts';
 import { useGetAllUsersQuery } from '@/store/api/usersApi.ts';
@@ -29,19 +18,18 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { editTaskFormSchema } from '@/types/schemas/editTaskFormSchema.ts';
 import { z } from 'zod';
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
+import { Form } from '@/components/ui/form';
 import {
     useCreateTaskMutation,
     useUpdateTaskMutation,
 } from '@/store/api/tasksApi';
 import { omit } from 'lodash';
+import TitleField from './components/TitleField';
+import DescField from './components/DescField';
+import BoardField from './components/BoardField';
+import PriorityField from './components/PriorityField';
+import StatusField from './components/StatusField';
+import AssigneeField from './components/AssigneeField';
 
 interface EditTaskProps {
     children: React.ReactNode;
@@ -153,203 +141,23 @@ const EditTaskDialog = ({
                             </DialogTitle>
 
                             <DialogDescription className="flex flex-col gap-y-4">
-                                <FormField
+                                <TitleField control={form.control} />
+
+                                <DescField control={form.control} />
+
+                                <BoardField
                                     control={form.control}
-                                    name="title"
-                                    render={({ field }) => (
-                                        <FormItem className="grid w-full items-center gap-1.5">
-                                            <FormLabel>Название</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    placeholder="Введите название"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
+                                    boards={boards}
+                                    task={task}
                                 />
 
-                                <FormField
-                                    control={form.control}
-                                    name="description"
-                                    render={({ field }) => (
-                                        <FormItem className="grid w-full items-center gap-1.5">
-                                            <FormLabel>Описание</FormLabel>
-                                            <FormControl>
-                                                <Textarea
-                                                    placeholder="Введите описание"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                                <PriorityField control={form.control} />
 
-                                <FormField
-                                    control={form.control}
-                                    name="boardId"
-                                    render={({ field }) => (
-                                        <FormItem className="grid w-full items-center gap-1.5">
-                                            <FormLabel>Доска</FormLabel>
-                                            <FormControl>
-                                                <Select
-                                                    disabled={!!task}
-                                                    value={field.value}
-                                                >
-                                                    <SelectTrigger className="w-full">
-                                                        <SelectValue placeholder="Выберите доску" />
-                                                    </SelectTrigger>
-                                                    {boards && (
-                                                        <SelectContent
-                                                            className="w-full"
-                                                            ref={field.ref}
-                                                        >
-                                                            {boards.data.map(
-                                                                (board) => (
-                                                                    <SelectItem
-                                                                        key={
-                                                                            board.id
-                                                                        }
-                                                                        value={board.id.toString()}
-                                                                    >
-                                                                        {
-                                                                            board.name
-                                                                        }
-                                                                    </SelectItem>
-                                                                ),
-                                                            )}
-                                                        </SelectContent>
-                                                    )}
-                                                </Select>
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                                <StatusField control={form.control} />
 
-                                <FormField
+                                <AssigneeField
                                     control={form.control}
-                                    name="priority"
-                                    render={({ field }) => (
-                                        <FormItem className="grid w-full items-center gap-1.5">
-                                            <FormLabel>Приоритет</FormLabel>
-                                            <FormControl>
-                                                <Select
-                                                    onValueChange={(e) => {
-                                                        field.onChange(e);
-                                                    }}
-                                                    value={field.value}
-                                                >
-                                                    <SelectTrigger className="w-full">
-                                                        <SelectValue placeholder="Выберите приоритет" />
-                                                    </SelectTrigger>
-                                                    <SelectContent
-                                                        ref={field.ref}
-                                                    >
-                                                        {TASK_PRIORITY_VALUES.map(
-                                                            (priority) => (
-                                                                <SelectItem
-                                                                    key={
-                                                                        priority
-                                                                    }
-                                                                    value={
-                                                                        priority
-                                                                    }
-                                                                >
-                                                                    {priority}
-                                                                </SelectItem>
-                                                            ),
-                                                        )}
-                                                    </SelectContent>
-                                                </Select>
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-
-                                <FormField
-                                    control={form.control}
-                                    name="status"
-                                    render={({ field }) => (
-                                        <FormItem className="grid w-full items-center gap-1.5">
-                                            <FormLabel>Статус</FormLabel>
-                                            <FormControl>
-                                                <Select
-                                                    onValueChange={(e) => {
-                                                        field.onChange(e);
-                                                    }}
-                                                    value={field.value}
-                                                >
-                                                    <SelectTrigger className="w-full">
-                                                        <SelectValue placeholder="Выберите статус" />
-                                                    </SelectTrigger>
-                                                    <SelectContent
-                                                        ref={field.ref}
-                                                    >
-                                                        {TASK_STATUS_VALUES.map(
-                                                            (status) => (
-                                                                <SelectItem
-                                                                    key={status}
-                                                                    value={
-                                                                        status
-                                                                    }
-                                                                >
-                                                                    {status}
-                                                                </SelectItem>
-                                                            ),
-                                                        )}
-                                                    </SelectContent>
-                                                </Select>
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-
-                                <FormField
-                                    control={form.control}
-                                    name="assigneeId"
-                                    render={({ field }) => (
-                                        <FormItem className="grid w-full items-center gap-1.5">
-                                            <FormLabel>Исполнитель</FormLabel>
-                                            <FormControl>
-                                                <Select
-                                                    onValueChange={(e) => {
-                                                        field.onChange(e);
-                                                    }}
-                                                    value={field.value}
-                                                >
-                                                    <SelectTrigger className="w-full">
-                                                        <SelectValue placeholder="Выберите исполнителя" />
-                                                    </SelectTrigger>
-                                                    {users && (
-                                                        <SelectContent
-                                                            ref={field.ref}
-                                                        >
-                                                            {users.data.map(
-                                                                (user) => (
-                                                                    <SelectItem
-                                                                        key={
-                                                                            user.id
-                                                                        }
-                                                                        value={user.id.toString()}
-                                                                    >
-                                                                        {
-                                                                            user.fullName
-                                                                        }
-                                                                    </SelectItem>
-                                                                ),
-                                                            )}
-                                                        </SelectContent>
-                                                    )}
-                                                </Select>
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
+                                    users={users}
                                 />
                             </DialogDescription>
                         </DialogHeader>
