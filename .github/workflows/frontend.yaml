@@ -37,7 +37,7 @@ jobs:
         run: npm run lint
 
       - name: Run Prettier
-        run: npx prettier
+        run: npm run prettier
 
   docker-basic-push:
     name: Build Docker image and push it to DockerHub
