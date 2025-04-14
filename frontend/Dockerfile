@@ -1,7 +1,7 @@
 # Stage 1: Base image for development and production
 FROM node:18-alpine AS base
 WORKDIR /app
-COPY package-lock.json ./
+COPY package.json package-lock.json ./
 RUN npm install
 COPY index.html tsconfig.app.json tsconfig.json tsconfig.node.json vite.config.ts ./
 COPY src ./src
